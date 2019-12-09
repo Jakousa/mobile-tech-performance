@@ -16,6 +16,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@sveltejs/svelte-virtual-list": "^3.0.1",
     "sirv-cli": "^0.4.4",
     "svelte-infinite-scroll": "^0.1.0"
   }
