@@ -1,0 +1,30 @@
+TEST 1: Empty screen
+
+Start: 1575913036
+34,509K: com.example.flutter_app (pid 17730 / activities) 34,509K: com.example.flutter_app (pid 17730 / activities)||1575913038
+34,518K: com.example.flutter_app (pid 17730 / activities) 34,518K: com.example.flutter_app (pid 17730 / activities)||1575913042
+34,530K: com.example.flutter_app (pid 17730 / activities) 34,530K: com.example.flutter_app (pid 17730 / activities)||1575913045
+34,463K: com.example.flutter_app (pid 17730 / activities) 34,463K: com.example.flutter_app (pid 17730 / activities)||1575913048
+34,471K: com.example.flutter_app (pid 17730 / activities) 34,471K: com.example.flutter_app (pid 17730 / activities)||1575913051
+34,483K: com.example.flutter_app (pid 17730 / activities) 34,483K: com.example.flutter_app (pid 17730 / activities)||1575913054
+34,518K: com.example.flutter_app (pid 17730 / activities) 34,518K: com.example.flutter_app (pid 17730 / activities)||1575913057
+34,534K: com.example.flutter_app (pid 17730 / activities) 34,534K: com.example.flutter_app (pid 17730 / activities)||1575913060
+34,538K: com.example.flutter_app (pid 17730 / activities) 34,538K: com.example.flutter_app (pid 17730 / activities)||1575913063
+34,554K: com.example.flutter_app (pid 17730 / activities) 34,554K: com.example.flutter_app (pid 17730 / activities)||1575913067
+
+TEST 2: List only
+
+Start: 1575913415
+62,357K: com.example.flutter_app (pid 19039 / activities) 62,357K: com.example.flutter_app (pid 19039 / activities)||1575913417
+62,301K: com.example.flutter_app (pid 19039 / activities) 62,301K: com.example.flutter_app (pid 19039 / activities)||1575913420
+62,317K: com.example.flutter_app (pid 19039 / activities) 62,317K: com.example.flutter_app (pid 19039 / activities)||1575913423
+62,642K: com.example.flutter_app (pid 19039 / activities) 62,642K: com.example.flutter_app (pid 19039 / activities)||1575913426
+62,654K: com.example.flutter_app (pid 19039 / activities) 62,654K: com.example.flutter_app (pid 19039 / activities)||1575913429
+62,646K: com.example.flutter_app (pid 19039 / activities) 62,646K: com.example.flutter_app (pid 19039 / activities)||1575913432
+62,658K: com.example.flutter_app (pid 19039 / activities) 62,658K: com.example.flutter_app (pid 19039 / activities)||1575913435
+62,666K: com.example.flutter_app (pid 19039 / activities) 62,666K: com.example.flutter_app (pid 19039 / activities)||1575913439
+62,682K: com.example.flutter_app (pid 19039 / activities) 62,682K: com.example.flutter_app (pid 19039 / activities)||1575913442
+62,690K: com.example.flutter_app (pid 19039 / activities) 62,690K: com.example.flutter_app (pid 19039 / activities)||1575913445
+
+TEST 3: Slow scroll speed (TODO: Proper measuring of speed)
+

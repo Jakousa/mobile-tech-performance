@@ -1,6 +1,5 @@
 <script>
   import SvelteInfiniteScroll from "svelte-infinite-scroll";
-  import VirtualList from "@sveltejs/svelte-virtual-list";
 
   const dimensions = 80;
   const rows = Math.ceil(window.screen.height / dimensions);
