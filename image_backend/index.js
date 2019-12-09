@@ -30,7 +30,7 @@ const getImage = async (size, position) => {
 
 app.get('/id/:id/:size', async (req, res) => {
   const { id, size } = req.params
-  const position = (id % 5) + 50 // The + is a magic number (make sure its bigger than 0)
+  const position = (id % 23) + 50 // The + is a magic number (make sure its bigger than 0)
 
   const image = await getImage(size, position)
   res.contentType('image/jpeg')
