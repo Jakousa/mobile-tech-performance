@@ -4,61 +4,23 @@
 
   const dimensions = 80;
   const rows = Math.ceil(window.screen.height / dimensions);
-  const perRow = Math.floor(window.screen.width / dimensions);
+  const perRow = 4; //Math.floor(window.screen.width / dimensions);
 
-  let items = Math.ceil(rows * perRow);
+  const itemsInScreen = Math.ceil(rows * perRow);
+  let items = itemsInScreen;
   let arr = [];
   for (let index = 0; index < items; index++) {
     arr.push(index);
   }
-  const things = [
-    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },
-        { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },
-        { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },
-        { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },    { name: "one", number: 1 },
-    { name: "two", number: 2 },
-    { name: "three", number: 3 },
-    { name: "six thousand and ninety-two", number: 6092 }
-  ];
-  /*
-  { length: items, slice: (start, end) => {
-      if (!start || !end) end = items;
-      let arr = [];
-      for (let index = start; index < end; index++) {
-        arr.push(index);
-      }
-      console.log('Defining arr', arr, start, end);
-      return arr;
-    } }
-  */
+  let y = 0;
+  let above = 0;
+  let bottom = window.innerHeight;
+
+  const handleScroll = e => {
+    y = e.target.scrollTop;
+    above = Math.floor(y / 84) - 10;
+    bottom = Math.floor((y + window.innerHeight) / 84) + 10
+  };
 </script>
 
 <style>
@@ -72,19 +34,30 @@
   }
 </style>
 
-<VirtualList height="500px" items={arr} let:item>
-  <p>{item}</p>
+<div on:scroll={handleScroll}>
   {#each { length: items } as _, i}
-    <img
-      width={dimensions}
-      height={dimensions}
-      style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`}
-      src={`https://mobvita.cs.helsinki.fi/id/${i}/${dimensions}`}
-      alt="whops" />
+    {#if ((i + 1) / perRow < above) || ((i + 1) / perRow) > bottom}
+      <img
+        width={dimensions}
+        height={dimensions}
+        style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`}
+        src={`https://avatars2.githubusercontent.com/u/468816?s=400&v=4`}
+        alt="whops" />
+    {:else}
+      <img
+        width={dimensions}
+        height={dimensions}
+        style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`}
+        src={`https://mobvita.cs.helsinki.fi/id/${i}/${dimensions}`}
+        alt="whops" />
+    {/if}
+    {#if i % 4 == 3}
+      <br />
+    {/if}
   {/each}
   <SvelteInfiniteScroll
-    threshold={perRow}
+    threshold={1000}
     on:loadMore={() => {
       items = items + perRow * 10;
     }} />
-</VirtualList>
+</div>
