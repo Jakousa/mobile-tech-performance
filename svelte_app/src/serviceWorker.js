@@ -10,7 +10,7 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read http://bit.ly/CRA-PWA
 
-const URL = "https://gentle-island-54883.herokuapp.com/"
+const HomeURL = "https://gentle-island-54883.herokuapp.com/"
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -25,7 +25,7 @@ const isLocalhost = Boolean(
 export function register(config) {
   if (true && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
-    const publicUrl = new URL(URL, window.location.href);
+    const publicUrl = new URL(HomeURL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
@@ -34,7 +34,7 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${URL}/service-worker.js`;
+      const swUrl = `${HomeURL}/service-worker.js`;
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
