@@ -4,13 +4,16 @@
   export let highestShownRow;
   export let lowestShownRow;
   export let dimensions;
+
+  export let srcThreshold;
+  export let imgThreshold;
 </script>
 
-{#if rowAt >= highestShownRow}
+{#if highestShownRow - imgThreshold < rowAt && rowAt < lowestShownRow + imgThreshold}
   <img
     width={dimensions}
     height={dimensions}
     style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
-    src={rowAt < highestShownRow || rowAt > lowestShownRow ? '' : `https://mobvita.cs.helsinki.fi/3/id/${index}/${dimensions}`}
+    src={highestShownRow - srcThreshold < rowAt && rowAt < lowestShownRow + srcThreshold ? `https://mobvita.cs.helsinki.fi/3/id/${index}/${dimensions}` : ''}
     alt="" />
 {/if}
