@@ -1,19 +1,16 @@
 <script>
-  import SvelteInfiniteScroll from "./InfiniteScroll.svelte";
+  import InfiniteScroll from "./InfiniteScroll.svelte";
 
   const dimensions = 80;
-  const rows = Math.ceil(window.screen.height / dimensions);
-  const perRow = 4; //Math.floor(window.screen.width / dimensions);
+  const bufferRowsAbove = 10;
+  const bufferRowsBelow = 5;
+  const rowHeight = dimensions + 4; // the image + padding
+  const rowsOnScreen = Math.ceil(window.screen.height / rowHeight); // How many rows are visible
+  const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
 
-  const itemsInScreen = Math.ceil(rows * perRow);
-  let items = itemsInScreen;
-  let arr = [];
-  for (let index = 0; index < items; index++) {
-    arr.push(index);
-  }
-  let y = 0;
-  let above = 0;
-  let bottom = window.innerHeight;
+  let items = Math.ceil(rowsOnScreen * itemsPerRow);
+  let rowsAbove = 0;
+  let rowsToBottom = window.innerHeight;
 
   let passedRows = 0;
   let startTime = new Date().getTime();
@@ -24,47 +21,36 @@
   }, 1000);
 
   const handleScroll = e => {
-    y = e.target.scrollTop;
-    if (Math.floor(y / 84) !== above) passedRows++;
-    above = Math.floor(y / 84);
-    bottom = Math.floor((y + window.innerHeight) / 84);
+    const distanceFromTop = e.target.scrollTop;
+    const newRowsAbove = Math.floor(distanceFromTop / 84);
+    if (newRowsAbove !== rowsAbove) passedRows++;
+    rowsAbove = newRowsAbove;
+    rowsToBottom = newRowsAbove + rowsOnScreen;
+  };
+
+  const loadMore = () => {
+    items = items + itemsPerRow * bufferRowsBelow;
   };
 </script>
 
-<style>
-  div {
-    width: 100vw;
-    max-height: 100vh;
-    overflow-x: scroll;
-  }
-  img {
-    padding: 0 2px;
-  }
-</style>
-
 <div on:scroll={handleScroll}>
-  {#each { length: items } as _, i}
-    {#if (i + 1) / perRow < above - 5 || (i + 1) / perRow > bottom + 5}
-      {#if i % 4 == 3}
+  {#each { length: items } as _, index}
+    {#if (index + 1) / itemsPerRow < rowsAbove - bufferRowsAbove || (index + 1) / itemsPerRow > rowsToBottom + bufferRowsBelow}
+      {#if index % 4 == 3}
         <div
           style={`min-height: ${dimensions + 4}px; min-width: ${dimensions + 4}px;`} />
       {/if}
     {:else}
-      {#if i % 4 == 0}
+      {#if index % 4 == 0 && index > 0}
         <br />
       {/if}
-
       <img
         width={dimensions}
         height={dimensions}
-        style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`}
-        src={`https://mobvita.cs.helsinki.fi/id/${i}/${dimensions}`}
+        style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
+        src={`https://mobvita.cs.helsinki.fi/id/${index}/${dimensions}`}
         alt="whops" />
     {/if}
   {/each}
-  <SvelteInfiniteScroll
-    threshold={800}
-    on:loadMore={() => {
-      items = items + perRow * 15;
-    }} />
+  <InfiniteScroll threshold={rowHeight * (bufferRowsBelow + 10)} on:loadMore={loadMore} />
 </div>

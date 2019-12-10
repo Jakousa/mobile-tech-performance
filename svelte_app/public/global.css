@@ -4,3 +4,9 @@ body {
 	text-align: center;
 }
 
+div {
+	width: 100vw;
+	max-height: 100vh;
+	overflow-x: scroll;
+}
+
