@@ -1,6 +1,6 @@
 <script>
   import InfiniteScroll from "./InfiniteScroll.svelte";
-
+  import SpeedOMeter from "./SpeedOMeter.svelte";
   const dimensions = 84;
   const bufferRowsAbove = 10;
   const bufferRowsBelow = 5;
@@ -15,38 +15,9 @@
   let rowsToBottom = window.innerHeight;
 
   let distanceTraveled = 0;
-  let prevDistance = 0;
-  let prevSpeedTime = 0;
-  let speed = 0;
-
-  const speedRaportInterval = setInterval(() => {
-    console.log(speed / rowHeight);
-  }, 1000);
-
-  const speedOMeter = setInterval(() => {
-    const timeNow = new Date().getTime();
-    const timeInInterval = (timeNow - prevSpeedTime) / 1000;
-    speed = distanceTraveled / timeInInterval;
-    prevSpeedTime = timeNow;
-    distanceTraveled = 0;
-  }, 100);
-
-  let prevTop = 0;
-
-  const sanicfunc = () => {
-    sanic = false;
-  }
 
   const handleScroll = e => {
-    if (speed / rowHeight > 50) {
-      if (sanic) clearTimeout(sanic);
-      sanic = setTimeout(sanicfunc, 100);
-    }
     const distanceFromTop = e.target.scrollTop;
-    const progress = Math.abs(distanceFromTop - prevTop);
-    prevTop = distanceFromTop;
-    distanceTraveled += progress;
-
     const newRowsAbove = Math.floor(distanceFromTop / dimensions + 4);
     rowsAbove = newRowsAbove;
     rowsToBottom = newRowsAbove + rowsOnScreen;
@@ -76,6 +47,10 @@
         alt="" />
     {/if}
   {/each}
+  <SpeedOMeter
+    distanceTraveled={distanceTraveled}
+    rowHeight={rowHeight}
+    sanic={sanic} />
   <InfiniteScroll
     threshold={rowHeight * (bufferRowsBelow + 100)}
     on:loadMore={loadMore} />

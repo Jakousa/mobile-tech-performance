@@ -8,7 +8,6 @@
     if (component || elementScroll) {
       const element = elementScroll ? elementScroll : component.parentNode;
       element.addEventListener("scroll", onScroll);
-      element.addEventListener("resize", onScroll);
     }
   }
 
@@ -23,7 +22,6 @@
   onDestroy(() => {
     const element = elementScroll ? elementScroll : component.parentNode;
     element.removeEventListener("scroll", null);
-    element.removeEventListener("resize", null);
   });
 </script>
 
