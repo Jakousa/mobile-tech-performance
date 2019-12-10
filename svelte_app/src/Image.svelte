@@ -9,7 +9,7 @@
   export let imgThreshold;
 </script>
 
-{#if highestShownRow - imgThreshold < rowAt && rowAt < lowestShownRow + imgThreshold}
+{#if highestShownRow - imgThreshold < rowAt}
   <img
     width={dimensions}
     height={dimensions}
