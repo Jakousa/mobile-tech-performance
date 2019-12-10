@@ -58,7 +58,6 @@
       sanic = setTimeout(() => {
         sanic = false;
       }, 100);
-      if (sanic) console.log(speed);
     }
     const distanceFromTop = e.target.scrollTop;
     const newRowsAbove = Math.floor(distanceFromTop / dimensions + 4);
@@ -68,7 +67,7 @@
   };
 
   const loadMore = () => {
-    items = items + itemsPerRow * bufferRowsBelow;
+    items = items + itemsPerRow * bufferRowsBelow * 33;
   };
 </script>
 
@@ -92,6 +91,6 @@
     {/if}
   {/each}
   <InfiniteScroll
-    threshold={rowHeight * (bufferRowsBelow + 10)}
+    threshold={rowHeight * (bufferRowsBelow + 100)}
     on:loadMore={loadMore} />
 </div>
