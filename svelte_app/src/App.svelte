@@ -1,11 +1,13 @@
 <script>
+  import { onMount } from "svelte";
   import InfiniteScroll from "./InfiniteScroll.svelte";
   import SpeedOMeter from "./SpeedOMeter.svelte";
+  import Image from "./Image.svelte";
   const dimensions = 84;
-  const bufferRowsAbove = 30;
-  const bufferRowsBelow = 30;
-  const rowHeight = dimensions + 4; // the image + padding
-  const rowsOnScreen = Math.ceil(window.screen.height / rowHeight); // How many rows are visible
+  const bufferRowsAbove = 25;
+  const bufferRowsBelow = 25;
+  const rowHeight = dimensions + 4; //4; // the image + padding
+  const rowsOnScreen = 15 + Math.ceil(window.screen.height / rowHeight); // How many rows are visible
   const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
   const startTime = new Date().getTime();
 
@@ -15,10 +17,12 @@
   let rowsAbove = 0;
   let rowsToBottom = window.innerHeight;
 
+  let distanceFromTop = 0;
+
   let distanceTraveled = 0;
 
   const handleScroll = e => {
-    const distanceFromTop = e.target.scrollTop;
+    distanceFromTop = e.target.scrollTop;
     const newRowsAbove = Math.floor(distanceFromTop / rowHeight);
     rowsAbove = newRowsAbove;
     rowsToBottom = newRowsAbove + rowsOnScreen;
@@ -27,29 +31,27 @@
   const loadMore = () => {
     items = items + itemsPerRow * (4 + Math.floor(speed / rowHeight));
   };
+
+  onMount(() => {
+    console.log("Ready");
+  });
 </script>
 
-<div on:scroll={handleScroll}>
+<div class="thediv"
+  on:scroll={handleScroll}
+  >
+  
+<div style={`padding-top: ${Math.max(0, distanceFromTop - (distanceFromTop % rowHeight) - rowHeight * bufferRowsAbove)}px;`}></div>
   {#each { length: items } as _, index}
-    {#if (index + 1) / itemsPerRow < rowsAbove - (bufferRowsAbove + Math.floor(speed / rowHeight)) || (index + 1) / itemsPerRow > rowsToBottom + (bufferRowsBelow + Math.floor(speed / rowHeight))}
-      {#if index % itemsPerRow == itemsPerRow - 1}
-        <div
-          style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`} />
-      {/if}
-    {:else}
-      {#if index % itemsPerRow == 0 && index > 0}
-        <br />
-      {/if}
-      <img
-        width={dimensions}
-        height={dimensions}
-        style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
-        src={sanic ? '' : `https://mobvita.cs.helsinki.fi/${1 + Math.floor(Math.random() * 4)}/id/${index}/${dimensions}`}
-        alt="" />
-    {/if}
+    <Image
+      {index}
+      {dimensions}
+      rowAt={index / itemsPerRow}
+      highestShownRow={rowsAbove - bufferRowsAbove}
+      lowestShownRow={rowsToBottom + bufferRowsBelow} />
   {/each}
-  <SpeedOMeter bind:speed bind:sanic {distanceTraveled} {rowHeight} />
+  <SpeedOMeter bind:speed {distanceTraveled} {rowHeight} />
   <InfiniteScroll
-    threshold={rowHeight * (bufferRowsBelow + 20)}
+    threshold={rowHeight * (bufferRowsBelow*3)}
     on:loadMore={loadMore} />
 </div>
