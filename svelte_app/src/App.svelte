@@ -51,13 +51,15 @@
     };
   })();
 
+  const sanicfunc = () => {
+    sanic = false;
+  }
+
   const handleScroll = e => {
     const speed = Math.abs(checkScrollSpeed(e));
     if (speed > 330) {
       if (sanic) clearTimeout(sanic);
-      sanic = setTimeout(() => {
-        sanic = false;
-      }, 100);
+      sanic = setTimeout(sanicfunc, 100);
     }
     const distanceFromTop = e.target.scrollTop;
     const newRowsAbove = Math.floor(distanceFromTop / dimensions + 4);
