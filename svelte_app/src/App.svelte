@@ -2,9 +2,9 @@
   import InfiniteScroll from "./InfiniteScroll.svelte";
   import SpeedOMeter from "./SpeedOMeter.svelte";
   const dimensions = 84;
-  const bufferRowsAbove = 30;
+  const bufferRowsAbove = 0;
   const bufferRowsBelow = 30;
-  const rowHeight = dimensions + 4; // the image + padding
+  const rowHeight = dimensions + 0;//4; // the image + padding
   const rowsOnScreen = Math.ceil(window.screen.height / rowHeight); // How many rows are visible
   const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
   const startTime = new Date().getTime();
@@ -15,31 +15,39 @@
   let rowsAbove = 0;
   let rowsToBottom = window.innerHeight;
 
+  let distanceFromTop = 0;
+
   let distanceTraveled = 0;
 
   const handleScroll = e => {
-    const distanceFromTop = e.target.scrollTop;
+    distanceFromTop = e.target.scrollTop;
     const newRowsAbove = Math.floor(distanceFromTop / rowHeight);
     rowsAbove = newRowsAbove;
     rowsToBottom = newRowsAbove + rowsOnScreen;
   };
 
   const loadMore = () => {
+    console.log("loadmore")
     items = items + itemsPerRow * (4 + Math.floor(speed / rowHeight));
   };
 </script>
 
 <div on:scroll={handleScroll}>
+  <div
+    style={`width: 100%; height: ${console.log(distanceFromTop)
+    || distanceFromTop-(distanceFromTop%rowHeight)-(rowHeight*bufferRowsAbove)}px;`}
+  />
   {#each { length: items } as _, index}
-    {#if (index + 1) / itemsPerRow < rowsAbove - (bufferRowsAbove + Math.floor(speed / rowHeight)) || (index + 1) / itemsPerRow > rowsToBottom + (bufferRowsBelow + Math.floor(speed / rowHeight))}
+    {#if (index + 0) / itemsPerRow <= rowsAbove - (bufferRowsAbove + 0)
+    || (index + 0) / itemsPerRow > rowsToBottom + (bufferRowsBelow + Math.floor(speed / rowHeight))}
       {#if index % itemsPerRow == itemsPerRow - 1}
-        <div
-          style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`} />
+        <!-- <div
+          style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`} /> -->
       {/if}
     {:else}
-      {#if index % itemsPerRow == 0 && index > 0}
+      <!-- {#if index % itemsPerRow == 0 && index > 0}
         <br />
-      {/if}
+      {/if} -->
       <img
         width={dimensions}
         height={dimensions}

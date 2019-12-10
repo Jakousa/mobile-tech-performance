@@ -9,3 +9,8 @@ div {
 	max-height: 100vh;
 	overflow-x: scroll;
 }
+
+img {
+	padding: 0 0px;
+	vertical-align: middle;
+}
