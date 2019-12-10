@@ -4,8 +4,8 @@
   import SpeedOMeter from "./SpeedOMeter.svelte";
   import Image from "./Image.svelte";
   const dimensions = 84;
-  const bufferRowsAbove = 0;
-  const bufferRowsBelow = 5;
+  const bufferRowsAbove = 25;
+  const bufferRowsBelow = 25;
   const rowHeight = dimensions + 0; //4; // the image + padding
   const rowsOnScreen = 15 + Math.ceil(window.screen.height / rowHeight); // How many rows are visible
   const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
@@ -37,21 +37,19 @@
   });
 </script>
 
-<div on:scroll={handleScroll} style={`padding-top: ${console.log(distanceFromTop)
-      || 2*rowHeight+distanceFromTop-(distanceFromTop%rowHeight)-(rowHeight*bufferRowsAbove)}px;`} 
-      >
+<div
+  on:scroll={handleScroll}
+  style={`padding-top: ${distanceFromTop - (distanceFromTop % rowHeight) - rowHeight * bufferRowsAbove}px;`}>
   {#each { length: items } as _, index}
-    <Image 
+    <Image
       {index}
-      {itemsPerRow}
       {dimensions}
       rowAt={index / itemsPerRow}
       highestShownRow={rowsAbove - bufferRowsAbove}
-      lowestShownRow={rowsToBottom + bufferRowsBelow}
-    />
+      lowestShownRow={rowsToBottom + bufferRowsBelow} />
   {/each}
   <SpeedOMeter bind:speed {distanceTraveled} {rowHeight} />
   <InfiniteScroll
-    threshold={rowHeight * (bufferRowsBelow + 20)}
+    threshold={rowHeight * (bufferRowsBelow + 300)}
     on:loadMore={loadMore} />
 </div>

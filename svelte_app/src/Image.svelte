@@ -11,6 +11,6 @@
     width={dimensions}
     height={dimensions}
     style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
-    src={rowAt < highestShownRow || rowAt > lowestShownRow ? `https://mobvita.cs.helsinki.fi/3/id/${index}/${dimensions}` : `https://mobvita.cs.helsinki.fi/3/id/${index}/${dimensions}`}
+    src={rowAt < highestShownRow || rowAt > lowestShownRow ? '' : `https://mobvita.cs.helsinki.fi/3/id/${index}/${dimensions}`}
     alt="" />
 {/if}
