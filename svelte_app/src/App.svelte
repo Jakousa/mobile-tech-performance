@@ -2,13 +2,14 @@
   import InfiniteScroll from "./InfiniteScroll.svelte";
   import SpeedOMeter from "./SpeedOMeter.svelte";
   const dimensions = 84;
-  const bufferRowsAbove = 10;
-  const bufferRowsBelow = 5;
+  const bufferRowsAbove = 30;
+  const bufferRowsBelow = 30;
   const rowHeight = dimensions + 4; // the image + padding
   const rowsOnScreen = Math.ceil(window.screen.height / rowHeight); // How many rows are visible
   const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
   const startTime = new Date().getTime();
 
+  let speed = 0;
   let sanic = false;
   let items = Math.ceil(rowsOnScreen * itemsPerRow);
   let rowsAbove = 0;
@@ -18,19 +19,19 @@
 
   const handleScroll = e => {
     const distanceFromTop = e.target.scrollTop;
-    const newRowsAbove = Math.floor(distanceFromTop / dimensions + 4);
+    const newRowsAbove = Math.floor(distanceFromTop / rowHeight);
     rowsAbove = newRowsAbove;
     rowsToBottom = newRowsAbove + rowsOnScreen;
   };
 
   const loadMore = () => {
-    items = items + itemsPerRow * bufferRowsBelow * 33;
+    items = items + itemsPerRow * (4 + Math.floor(speed / rowHeight));
   };
 </script>
 
-<div on:scroll={handleScroll} style={'padding-top: 4px'}>
+<div on:scroll={handleScroll}>
   {#each { length: items } as _, index}
-    {#if (index + 1) / itemsPerRow < rowsAbove - bufferRowsAbove || (index + 1) / itemsPerRow > rowsToBottom + bufferRowsBelow}
+    {#if (index + 1) / itemsPerRow < rowsAbove - (bufferRowsAbove + Math.floor(speed / rowHeight)) || (index + 1) / itemsPerRow > rowsToBottom + (bufferRowsBelow + Math.floor(speed / rowHeight))}
       {#if index % itemsPerRow == itemsPerRow - 1}
         <div
           style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`} />
@@ -47,11 +48,8 @@
         alt="" />
     {/if}
   {/each}
-  <SpeedOMeter
-    distanceTraveled={distanceTraveled}
-    rowHeight={rowHeight}
-    sanic={sanic} />
+  <SpeedOMeter bind:speed bind:sanic {distanceTraveled} {rowHeight} />
   <InfiniteScroll
-    threshold={rowHeight * (bufferRowsBelow + 100)}
+    threshold={rowHeight * (bufferRowsBelow + 20)}
     on:loadMore={loadMore} />
 </div>

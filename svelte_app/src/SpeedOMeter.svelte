@@ -4,14 +4,14 @@
   export let rowHeight;
   export let distanceTraveled;
   export let sanic;
+  export let speed;
   let component;
   let prevDistance = 0;
   let prevSpeedTime = 0;
-  let speed = 0;
   let prevTop = 0;
 
   const speedRaportInterval = setInterval(() => {
-    console.log(speed / rowHeight);
+    console.log(`Speed: ${speed / rowHeight}`);
   }, 1000);
 
   const speedOMeter = setInterval(() => {
@@ -30,14 +30,13 @@
   }
 
   const onScroll = e => {
-    const distanceFromTop = e.target.scrollTop;
-    if (speed / rowHeight > 50) {
+    if (speed / rowHeight > 60) {
       if (sanic) clearTimeout(sanic);
       sanic = setTimeout(() => {
         sanic = false;
       }, 100);
     }
-
+    const distanceFromTop = e.target.scrollTop;
     const progress = Math.abs(distanceFromTop - prevTop);
     prevTop = distanceFromTop;
     distanceTraveled += progress;
