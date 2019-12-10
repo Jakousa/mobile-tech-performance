@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
+import 'dart:async';
 
-void main() => runApp(MyApp());
+var rows = 0;
+
+void main() {
+  const oneSec = const Duration(seconds:1);
+  new Timer.periodic(oneSec, (Timer t) {
+    print('hi!' + rows.toString());
+    rows = 0;
+  });
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -25,8 +35,7 @@ class RandomWordsState extends State<RandomWords> {
   // https://picsum.photos/id/1084/160/160
   var url = 'https://picsum.photos/160/160';
   var rng = new Random();
-  var imagesPerRow = 5;
-  var prevTime = -1;
+  var imagesPerRow = 4;
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _ids = List<List <int>>();
 
@@ -35,14 +44,7 @@ class RandomWordsState extends State<RandomWords> {
         padding: const EdgeInsets.all(2),
         itemBuilder: /*1*/ (context, i) {
           if (i.isOdd) return Container();
-          var now = new DateTime.now().millisecondsSinceEpoch;
-          if (prevTime > 0) {
-            var result = 1000 / (now - prevTime);
-            if (!result.isNaN && !result.isInfinite) {
-              print(result.floor().toString());
-            }
-          }
-          prevTime = now;
+          rows++;
           //print(rng.nextInt(1000).toString());
           if (i ~/ 2 >= _ids.length) {
             for (var i = 0; i < 100; i++) {
@@ -67,11 +69,11 @@ class RandomWordsState extends State<RandomWords> {
     // debugPrint(row.toString());
     final mapped = row.map<Widget>((id) => Expanded(
       child: Padding(
-        padding: EdgeInsets.only(left: 2, top: 1, right: 2, bottom: 1),
+        padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
         child: Image.network(
-          "https://mobvita.cs.helsinki.fi/id/" + id.toString() + "/80",
-          height: 70,
-          width: 160,
+          "https://mobvita.cs.helsinki.fi/id/" + id.toString() + "/90",
+          height: 90,
+          width: 90,
           loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
             if (loadingProgress == null) return child;
             return Center(
