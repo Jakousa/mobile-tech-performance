@@ -47,8 +47,11 @@
       {index}
       {dimensions}
       rowAt={index / itemsPerRow}
-      highestShownRow={rowsAbove - bufferRowsAbove}
-      lowestShownRow={rowsToBottom + bufferRowsBelow} />
+      highestShownRow={rowsAbove}
+      lowestShownRow={rowsToBottom}
+      srcThreshold={bufferRowsAbove/2}
+      imgThreshold={bufferRowsAbove}
+      />
   {/each}
   <SpeedOMeter bind:speed {distanceTraveled} {rowHeight} />
   <InfiniteScroll
