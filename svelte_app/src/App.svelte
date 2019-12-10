@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte'
   import InfiniteScroll from "./InfiniteScroll.svelte";
   import SpeedOMeter from "./SpeedOMeter.svelte";
   const dimensions = 84;
@@ -26,9 +27,12 @@
   const loadMore = () => {
     items = items + itemsPerRow * (4 + Math.floor(speed / rowHeight));
   };
+  onMount(() => {
+    console.log('Ready')
+  })
 </script>
 
-<div on:scroll={handleScroll}>
+<div on:scroll={handleScroll} >
   {#each { length: items } as _, index}
 
       {#if index % itemsPerRow == 0 && index > 0}
