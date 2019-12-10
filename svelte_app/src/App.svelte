@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte'
   import InfiniteScroll from "./InfiniteScroll.svelte";
   import SpeedOMeter from "./SpeedOMeter.svelte";
   const dimensions = 84;
@@ -33,13 +34,12 @@
   };
 
   $: console.log("??")
+  onMount(() => {
+    console.log('Ready')
+  })
 </script>
 
-<div on:scroll={handleScroll}>
-  <div
-    style={`width: 100%; height: ${console.log(distanceFromTop)
-    || 2*rowHeight+distanceFromTop-(distanceFromTop%rowHeight)-(rowHeight*bufferRowsAbove)}px;`}
-  />
+<div on:scroll={handleScroll} >
   {#each { length: items } as _, index}
 
       <!-- {#if index % itemsPerRow == 0 && index > 0}
