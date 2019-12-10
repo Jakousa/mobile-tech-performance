@@ -6,7 +6,7 @@
   const dimensions = 84;
   const bufferRowsAbove = 25;
   const bufferRowsBelow = 25;
-  const rowHeight = dimensions + 0; //4; // the image + padding
+  const rowHeight = dimensions + 4; //4; // the image + padding
   const rowsOnScreen = 15 + Math.ceil(window.screen.height / rowHeight); // How many rows are visible
   const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
   const startTime = new Date().getTime();
