@@ -44,7 +44,7 @@
         width={dimensions}
         height={dimensions}
         style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
-        src={sanic ? '' : `https://mobvita.cs.helsinki.fi/id/${index}/${dimensions}`}
+        src={sanic ? '' : `https://mobvita.cs.helsinki.fi/${1 + Math.floor(Math.random() * 4)}/id/${index}/${dimensions}`}
         alt="" />
     {/if}
   {/each}
