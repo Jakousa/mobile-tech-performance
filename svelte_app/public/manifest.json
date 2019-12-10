@@ -2,8 +2,21 @@
   "short_name": "HelsinginScroll",
   "name": "HelsinginScroll",
   "icons": [],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "pwaicon_s.png",
+      "sizes": "192x192",
+      "type": "image\/png",
+    },
+    {
+      "src": "pwaicon.png",
+      "sizes": "512x512",
+      "type": "image\/png"
+    }
+  ]
 }
