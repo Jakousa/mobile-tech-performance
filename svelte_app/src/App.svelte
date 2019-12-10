@@ -1,5 +1,5 @@
 <script>
-  import SvelteInfiniteScroll from "svelte-infinite-scroll";
+  import SvelteInfiniteScroll from "./InfiniteScroll.svelte";
 
   const dimensions = 80;
   const rows = Math.ceil(window.screen.height / dimensions);
@@ -63,8 +63,8 @@
     {/if}
   {/each}
   <SvelteInfiniteScroll
-    threshold={80}
+    threshold={800}
     on:loadMore={() => {
-      items = items + perRow * 5;
+      items = items + perRow * 15;
     }} />
 </div>
