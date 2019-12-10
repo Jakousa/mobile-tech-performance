@@ -1,7 +1,7 @@
 <script>
   import InfiniteScroll from "./InfiniteScroll.svelte";
 
-  const dimensions = 90;
+  const dimensions = 84;
   const bufferRowsAbove = 10;
   const bufferRowsBelow = 5;
   const rowHeight = dimensions + 4; // the image + padding
