@@ -3,7 +3,6 @@
   const dispatch = createEventDispatcher();
   export let rowHeight;
   export let distanceTraveled;
-  export let sanic;
   export let speed;
   let component;
   let prevDistance = 0;
@@ -20,7 +19,7 @@
     speed = distanceTraveled / timeInInterval;
     prevSpeedTime = timeNow;
     distanceTraveled = 0;
-  }, 100);
+  }, 250);
 
   $: {
     if (component) {
@@ -30,12 +29,6 @@
   }
 
   const onScroll = e => {
-    if (speed / rowHeight > 60) {
-      if (sanic) clearTimeout(sanic);
-      sanic = setTimeout(() => {
-        sanic = false;
-      }, 100);
-    }
     const distanceFromTop = e.target.scrollTop;
     const progress = Math.abs(distanceFromTop - prevTop);
     prevTop = distanceFromTop;
