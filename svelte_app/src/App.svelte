@@ -33,12 +33,14 @@
 
   let prevTop = 0;
 
+  const sanicfunc = () => {
+    sanic = false;
+  }
+
   const handleScroll = e => {
     if (speed / rowHeight > 50) {
       if (sanic) clearTimeout(sanic);
-      sanic = setTimeout(() => {
-        sanic = false;
-      }, 100);
+      sanic = setTimeout(sanicfunc, 100);
     }
     const distanceFromTop = e.target.scrollTop;
     const progress = Math.abs(distanceFromTop - prevTop);
