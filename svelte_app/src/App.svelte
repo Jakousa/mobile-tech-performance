@@ -8,6 +8,7 @@
   const rowsOnScreen = Math.ceil(window.screen.height / rowHeight); // How many rows are visible
   const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
 
+  let sanic = false;
   let items = Math.ceil(rowsOnScreen * itemsPerRow);
   let rowsAbove = 0;
   let rowsToBottom = window.innerHeight;
@@ -15,12 +16,49 @@
   let passedRows = 0;
   let startTime = new Date().getTime();
   const interval = setInterval(() => {
+    console.log(sanic);
     const timeNow = new Date().getTime();
     const speed = passedRows / ((timeNow - startTime) / 1000);
     console.log(speed);
   }, 1000);
 
+  var checkScrollSpeed = (function(settings) {
+    settings = settings || {};
+
+    var lastPos,
+      newPos,
+      timer,
+      delta,
+      delay = settings.delay || 50; // in "ms" (higher means lower fidelity )
+
+    function clear() {
+      lastPos = null;
+      delta = 0;
+    }
+
+    clear();
+
+    return function(e) {
+      newPos = e.target.scrollTop;
+      if (lastPos != null) {
+        // && newPos < maxScroll
+        delta = newPos - lastPos;
+      }
+      lastPos = newPos;
+      clearTimeout(timer);
+      timer = setTimeout(clear, delay);
+      return delta;
+    };
+  })();
+
   const handleScroll = e => {
+    const speed = Math.abs(checkScrollSpeed(e));
+
+    if (speed > 160 && !sanic) {
+      sanic = true;
+    } else if (speed < 160 && sanic) {
+      sanic = false;
+    }
     const distanceFromTop = e.target.scrollTop;
     const newRowsAbove = Math.floor(distanceFromTop / 84);
     if (newRowsAbove !== rowsAbove) passedRows++;
@@ -48,9 +86,11 @@
         width={dimensions}
         height={dimensions}
         style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
-        src={`https://mobvita.cs.helsinki.fi/id/${index}/${dimensions}`}
-        alt="whops" />
+        src={sanic ? '' : `https://mobvita.cs.helsinki.fi/id/${index}/${dimensions}`}
+        alt="" />
     {/if}
   {/each}
-  <InfiniteScroll threshold={rowHeight * (bufferRowsBelow + 10)} on:loadMore={loadMore} />
+  <InfiniteScroll
+    threshold={rowHeight * (bufferRowsBelow + 10)}
+    on:loadMore={loadMore} />
 </div>
