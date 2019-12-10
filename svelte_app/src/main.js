@@ -1,5 +1,5 @@
 import App from './App.svelte';
-import * as serviceWorker from './serviceWorker';
+import serviceWorker from '../public/serviceWorker';
 
 const app = new App({
 	target: document.body,
