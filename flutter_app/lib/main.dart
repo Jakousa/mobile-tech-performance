@@ -3,13 +3,14 @@ import 'package:english_words/english_words.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'dart:async';
+import 'package:flutter/services.dart';
 
 var rows = 0;
 
 void main() {
   const oneSec = const Duration(seconds:1);
   new Timer.periodic(oneSec, (Timer t) {
-    //print('hi!' + rows.toString());
+    //print('rows:' + rows.toString());
     rows = 0;
   });
   runApp(MyApp());
@@ -50,6 +51,7 @@ class RandomWordsState extends State<RandomWords> {
   var imagesPerRow = 4;
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _ids = List<List <int>>();
+  var rendered = false;
 
   Widget _buildSuggestions() {
     return ListView.builder(
@@ -79,6 +81,10 @@ class RandomWordsState extends State<RandomWords> {
     }
 
   Widget _buildRow(row) {
+    if (!rendered) {
+      rendered = true;
+      print("First render!");
+    }
     // debugPrint(row.toString());
     final mapped = row.map<Widget>((id) => Expanded(
       child: Padding(
