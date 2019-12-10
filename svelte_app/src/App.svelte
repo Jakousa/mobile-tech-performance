@@ -1,7 +1,7 @@
 <script>
   import InfiniteScroll from "./InfiniteScroll.svelte";
 
-  const dimensions = 80;
+  const dimensions = 90;
   const bufferRowsAbove = 10;
   const bufferRowsBelow = 5;
   const rowHeight = dimensions + 4; // the image + padding
@@ -53,14 +53,15 @@
 
   const handleScroll = e => {
     const speed = Math.abs(checkScrollSpeed(e));
-
-    if (speed > 160 && !sanic) {
-      sanic = true;
-    } else if (speed < 160 && sanic) {
-      sanic = false;
+    if (speed > 330) {
+      if (sanic) clearTimeout(sanic);
+      sanic = setTimeout(() => {
+        sanic = false;
+      }, 100);
+      if (sanic) console.log(speed);
     }
     const distanceFromTop = e.target.scrollTop;
-    const newRowsAbove = Math.floor(distanceFromTop / 84);
+    const newRowsAbove = Math.floor(distanceFromTop / dimensions + 4);
     if (newRowsAbove !== rowsAbove) passedRows++;
     rowsAbove = newRowsAbove;
     rowsToBottom = newRowsAbove + rowsOnScreen;
@@ -71,12 +72,12 @@
   };
 </script>
 
-<div on:scroll={handleScroll}>
+<div on:scroll={handleScroll} style={'padding-top: 4px'}>
   {#each { length: items } as _, index}
     {#if (index + 1) / itemsPerRow < rowsAbove - bufferRowsAbove || (index + 1) / itemsPerRow > rowsToBottom + bufferRowsBelow}
       {#if index % 4 == 3}
         <div
-          style={`min-height: ${dimensions + 4}px; min-width: ${dimensions + 4}px;`} />
+          style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`} />
       {/if}
     {:else}
       {#if index % 4 == 0 && index > 0}
