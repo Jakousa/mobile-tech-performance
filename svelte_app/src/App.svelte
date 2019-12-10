@@ -1,62 +1,55 @@
 <script>
-  import SvelteInfiniteScroll from "svelte-infinite-scroll";
+  import InfiniteScroll from "./InfiniteScroll.svelte";
+  import SpeedOMeter from "./SpeedOMeter.svelte";
+  const dimensions = 84;
+  const bufferRowsAbove = 30;
+  const bufferRowsBelow = 30;
+  const rowHeight = dimensions + 4; // the image + padding
+  const rowsOnScreen = Math.ceil(window.screen.height / rowHeight); // How many rows are visible
+  const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
+  const startTime = new Date().getTime();
 
-  const dimensions = 80;
-  const rows = Math.ceil(window.screen.height / dimensions);
-  const perRow = 4; //Math.floor(window.screen.width / dimensions);
+  let speed = 0;
+  let sanic = false;
+  let items = Math.ceil(rowsOnScreen * itemsPerRow);
+  let rowsAbove = 0;
+  let rowsToBottom = window.innerHeight;
 
-  const itemsInScreen = Math.ceil(rows * perRow);
-  let items = itemsInScreen;
-  let arr = [];
-  for (let index = 0; index < items; index++) {
-    arr.push(index);
-  }
-  let y = 0;
-  let above = 0;
-  let bottom = window.innerHeight;
+  let distanceTraveled = 0;
 
   const handleScroll = e => {
-    y = e.target.scrollTop;
-    above = Math.floor(y / 84) - 10;
-    bottom = Math.floor((y + window.innerHeight) / 84) + 10
+    const distanceFromTop = e.target.scrollTop;
+    const newRowsAbove = Math.floor(distanceFromTop / rowHeight);
+    rowsAbove = newRowsAbove;
+    rowsToBottom = newRowsAbove + rowsOnScreen;
+  };
+
+  const loadMore = () => {
+    items = items + itemsPerRow * (4 + Math.floor(speed / rowHeight));
   };
 </script>
 
-<style>
-  div {
-    width: 100vw;
-    max-height: 100vh;
-    overflow-x: scroll;
-  }
-  img {
-    padding: 0 2px;
-  }
-</style>
-
 <div on:scroll={handleScroll}>
-  {#each { length: items } as _, i}
-    {#if ((i + 1) / perRow < above) || ((i + 1) / perRow) > bottom}
-      <img
-        width={dimensions}
-        height={dimensions}
-        style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`}
-        src={`https://avatars2.githubusercontent.com/u/468816?s=400&v=4`}
-        alt="whops" />
+  {#each { length: items } as _, index}
+    {#if (index + 1) / itemsPerRow < rowsAbove - (bufferRowsAbove + Math.floor(speed / rowHeight)) || (index + 1) / itemsPerRow > rowsToBottom + (bufferRowsBelow + Math.floor(speed / rowHeight))}
+      {#if index % itemsPerRow == itemsPerRow - 1}
+        <div
+          style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`} />
+      {/if}
     {:else}
+      {#if index % itemsPerRow == 0 && index > 0}
+        <br />
+      {/if}
       <img
         width={dimensions}
         height={dimensions}
-        style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`}
-        src={`https://mobvita.cs.helsinki.fi/id/${i}/${dimensions}`}
-        alt="whops" />
-    {/if}
-    {#if i % 4 == 3}
-      <br />
+        style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
+        src={sanic ? '' : `https://mobvita.cs.helsinki.fi/${1 + Math.floor(Math.random() * 4)}/id/${index}/${dimensions}`}
+        alt="" />
     {/if}
   {/each}
-  <SvelteInfiniteScroll
-    threshold={1000}
-    on:loadMore={() => {
-      items = items + perRow * 10;
-    }} />
+  <SpeedOMeter bind:speed bind:sanic {distanceTraveled} {rowHeight} />
+  <InfiniteScroll
+    threshold={rowHeight * (bufferRowsBelow + 20)}
+    on:loadMore={loadMore} />
 </div>

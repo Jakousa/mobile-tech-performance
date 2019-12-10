@@ -1,0 +1,28 @@
+<script>
+  import { onDestroy, createEventDispatcher } from "svelte";
+  export let threshold = 0;
+  export let elementScroll;
+  const dispatch = createEventDispatcher();
+  let component;
+  $: {
+    if (component || elementScroll) {
+      const element = elementScroll ? elementScroll : component.parentNode;
+      element.addEventListener("scroll", onScroll);
+    }
+  }
+
+  const onScroll = e => {
+    const offset =
+      e.target.scrollHeight - e.target.clientHeight - e.target.scrollTop;
+    if (offset <= threshold) {
+      dispatch("loadMore");
+    }
+  };
+
+  onDestroy(() => {
+    const element = elementScroll ? elementScroll : component.parentNode;
+    element.removeEventListener("scroll", null);
+  });
+</script>
+
+<div bind:this={component} style="width:0px" />

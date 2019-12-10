@@ -1,5 +1,7 @@
 TEST 1: Empty screen
 
+STARTUP DELAY: TODO
+
 Start: 1575913036
 34,509K: com.example.flutter_app (pid 17730 / activities) 34,509K: com.example.flutter_app (pid 17730 / activities)||1575913038
 34,518K: com.example.flutter_app (pid 17730 / activities) 34,518K: com.example.flutter_app (pid 17730 / activities)||1575913042
@@ -11,8 +13,11 @@ Start: 1575913036
 34,534K: com.example.flutter_app (pid 17730 / activities) 34,534K: com.example.flutter_app (pid 17730 / activities)||1575913060
 34,538K: com.example.flutter_app (pid 17730 / activities) 34,538K: com.example.flutter_app (pid 17730 / activities)||1575913063
 34,554K: com.example.flutter_app (pid 17730 / activities) 34,554K: com.example.flutter_app (pid 17730 / activities)||1575913067
+35 MB
 
 TEST 2: List only
+
+STARTUP DELAY: 180f / 244fps = 0.7377049...s
 
 Start: 1575913415
 62,357K: com.example.flutter_app (pid 19039 / activities) 62,357K: com.example.flutter_app (pid 19039 / activities)||1575913417
@@ -25,6 +30,27 @@ Start: 1575913415
 62,666K: com.example.flutter_app (pid 19039 / activities) 62,666K: com.example.flutter_app (pid 19039 / activities)||1575913439
 62,682K: com.example.flutter_app (pid 19039 / activities) 62,682K: com.example.flutter_app (pid 19039 / activities)||1575913442
 62,690K: com.example.flutter_app (pid 19039 / activities) 62,690K: com.example.flutter_app (pid 19039 / activities)||1575913445
+62 MB
 
-TEST 3: Slow scroll speed (TODO: Proper measuring of speed)
 
+TEST 3 (60 sec): Slow scroll speed (10 rows per second)
+------
+NATIVE:
+FPS (Average from 60 seconds): 58.276666666....
+MEM: Caps at 230MB, increases by 0.22MB/s
+
+WEB:
+FPS: 58.9383333....
+MEM: Starts from 1.1MB, stopped measuring at 7.1MB after 1 minute. Increases by 0.2MB/s
+
+
+TEST 4 (60 sec): Medium scroll speed (20 rows per second)
+------
+FPS (Average from 60 seconds): 57.97166666...
+MEM: Caps at 230MB, increases by 0.37MB/s
+
+
+TEST 5 (60 sec): Fast scroll speed (30 rows per second)
+------
+FPS (Average from 60 seconds): 57.73666666...
+MEM: Caps at 230MB, increases by 0.43MB/s
