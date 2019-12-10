@@ -1,5 +1,0 @@
-Start: 1575931195
-85,192K: com.example.flutter_app (pid 12842 / activities) 85,192K: com.example.flutter_app (pid 12842 / activities)||1575931197
-85,196K: com.example.flutter_app (pid 12842 / activities) 85,196K: com.example.flutter_app (pid 12842 / activities)||1575931201
-85,196K: com.example.flutter_app (pid 12842 / activities) 85,196K: com.example.flutter_app (pid 12842 / activities)||1575931204
-85,200K: com.example.flutter_app (pid 12842 / activities) 85,200K: com.example.flutter_app (pid 12842 / activities)||1575931207

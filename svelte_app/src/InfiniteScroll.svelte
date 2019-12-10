@@ -1,13 +1,11 @@
 <script>
   import { onDestroy, createEventDispatcher } from "svelte";
   export let threshold = 0;
-  export let elementScroll;
   const dispatch = createEventDispatcher();
   let component;
   $: {
-    if (component || elementScroll) {
-      const element = elementScroll ? elementScroll : component.parentNode;
-      element.addEventListener("scroll", onScroll);
+    if (component) {
+      component.parentNode.addEventListener("scroll", onScroll);
     }
   }
 
@@ -20,8 +18,7 @@
   };
 
   onDestroy(() => {
-    const element = elementScroll ? elementScroll : component.parentNode;
-    element.removeEventListener("scroll", null);
+    component.parentNode.removeEventListener("scroll", null);
   });
 </script>
 

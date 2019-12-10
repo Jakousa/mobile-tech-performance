@@ -3,9 +3,9 @@
   import SpeedOMeter from "./SpeedOMeter.svelte";
   const dimensions = 84;
   const bufferRowsAbove = 0;
-  const bufferRowsBelow = 30;
+  const bufferRowsBelow = 5;
   const rowHeight = dimensions + 0;//4; // the image + padding
-  const rowsOnScreen = Math.ceil(window.screen.height / rowHeight); // How many rows are visible
+  const rowsOnScreen = 15+Math.ceil(window.screen.height / rowHeight); // How many rows are visible
   const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
   const startTime = new Date().getTime();
 
@@ -22,6 +22,7 @@
   const handleScroll = e => {
     distanceFromTop = e.target.scrollTop;
     const newRowsAbove = Math.floor(distanceFromTop / rowHeight);
+    console.log(newRowsAbove, rowsAbove)
     rowsAbove = newRowsAbove;
     rowsToBottom = newRowsAbove + rowsOnScreen;
   };
@@ -30,34 +31,35 @@
     console.log("loadmore")
     items = items + itemsPerRow * (4 + Math.floor(speed / rowHeight));
   };
+
+  $: console.log("??")
 </script>
 
 <div on:scroll={handleScroll}>
   <div
     style={`width: 100%; height: ${console.log(distanceFromTop)
-    || distanceFromTop-(distanceFromTop%rowHeight)-(rowHeight*bufferRowsAbove)}px;`}
+    || 2*rowHeight+distanceFromTop-(distanceFromTop%rowHeight)-(rowHeight*bufferRowsAbove)}px;`}
   />
   {#each { length: items } as _, index}
-    {#if (index + 0) / itemsPerRow <= rowsAbove - (bufferRowsAbove + 0)
-    || (index + 0) / itemsPerRow > rowsToBottom + (bufferRowsBelow + Math.floor(speed / rowHeight))}
-      {#if index % itemsPerRow == itemsPerRow - 1}
-        <!-- <div
-          style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`} /> -->
-      {/if}
-    {:else}
+
       <!-- {#if index % itemsPerRow == 0 && index > 0}
         <br />
       {/if} -->
-      <img
-        width={dimensions}
-        height={dimensions}
-        style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
-        src={sanic ? '' : `https://mobvita.cs.helsinki.fi/${1 + Math.floor(Math.random() * 4)}/id/${index}/${dimensions}`}
-        alt="" />
-    {/if}
+
+      {#if console.log(index, itemsPerRow, rowsAbove, bufferRowsAbove, (index + 0) / itemsPerRow, rowsAbove - (bufferRowsAbove)) || (index + 0) / itemsPerRow >= rowsAbove - (bufferRowsAbove)}
+        <img
+          width={dimensions}
+          height={dimensions}
+          style={`min-height: ${dimensions}px; min-width: ${dimensions}px; background: #fafafa;`}
+          src={
+            (index + 0) / itemsPerRow < rowsAbove - (bufferRowsAbove / 2) || 
+            (index + 0) / itemsPerRow > rowsToBottom + (bufferRowsBelow / 2 + Math.floor(speed / rowHeight)) ? 
+            `https://mobvita.cs.helsinki.fi/3/id/${index}/${dimensions}` : `https://mobvita.cs.helsinki.fi/3/id/${index}/${dimensions}`}
+          alt="" />
+      {/if}
   {/each}
-  <SpeedOMeter bind:speed bind:sanic {distanceTraveled} {rowHeight} />
-  <InfiniteScroll
+  <SpeedOMeter bind:speed {distanceTraveled} {rowHeight} />
+  <!-- <InfiniteScroll
     threshold={rowHeight * (bufferRowsBelow + 20)}
-    on:loadMore={loadMore} />
+    on:loadMore={loadMore} /> -->
 </div>
