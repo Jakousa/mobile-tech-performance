@@ -7,61 +7,45 @@
   const rowHeight = dimensions + 4; // the image + padding
   const rowsOnScreen = Math.ceil(window.screen.height / rowHeight); // How many rows are visible
   const itemsPerRow = 4; //Math.floor(window.screen.width / dimensions);
+  const startTime = new Date().getTime();
 
   let sanic = false;
   let items = Math.ceil(rowsOnScreen * itemsPerRow);
   let rowsAbove = 0;
   let rowsToBottom = window.innerHeight;
 
-  let passedRows = 0;
-  let startTime = new Date().getTime();
-  const interval = setInterval(() => {
-    console.log(sanic);
-    const timeNow = new Date().getTime();
-    const speed = passedRows / ((timeNow - startTime) / 1000);
-    console.log(speed);
+  let distanceTraveled = 0;
+  let prevDistance = 0;
+  let prevSpeedTime = 0;
+  let speed = 0;
+
+  const speedRaportInterval = setInterval(() => {
+    console.log(speed / rowHeight);
   }, 1000);
 
-  var checkScrollSpeed = (function(settings) {
-    settings = settings || {};
+  const speedOMeter = setInterval(() => {
+    const timeNow = new Date().getTime();
+    const timeInInterval = (timeNow - prevSpeedTime) / 1000;
+    speed = distanceTraveled / timeInInterval;
+    prevSpeedTime = timeNow;
+    distanceTraveled = 0;
+  }, 100);
 
-    var lastPos,
-      newPos,
-      timer,
-      delta,
-      delay = settings.delay || 50; // in "ms" (higher means lower fidelity )
-
-    function clear() {
-      lastPos = null;
-      delta = 0;
-    }
-
-    clear();
-
-    return function(e) {
-      newPos = e.target.scrollTop;
-      if (lastPos != null) {
-        // && newPos < maxScroll
-        delta = newPos - lastPos;
-      }
-      lastPos = newPos;
-      clearTimeout(timer);
-      timer = setTimeout(clear, delay);
-      return delta;
-    };
-  })();
+  let prevTop = 0;
 
   const handleScroll = e => {
-    const speed = Math.abs(checkScrollSpeed(e));
-    if (speed > 330) {
+    if (speed / rowHeight > 50) {
       if (sanic) clearTimeout(sanic);
       sanic = setTimeout(() => {
         sanic = false;
       }, 100);
     }
     const distanceFromTop = e.target.scrollTop;
+    const progress = Math.abs(distanceFromTop - prevTop);
+    prevTop = distanceFromTop;
+    distanceTraveled += progress;
+
     const newRowsAbove = Math.floor(distanceFromTop / dimensions + 4);
-    if (newRowsAbove !== rowsAbove) passedRows++;
     rowsAbove = newRowsAbove;
     rowsToBottom = newRowsAbove + rowsOnScreen;
   };
@@ -74,12 +58,12 @@
 <div on:scroll={handleScroll} style={'padding-top: 4px'}>
   {#each { length: items } as _, index}
     {#if (index + 1) / itemsPerRow < rowsAbove - bufferRowsAbove || (index + 1) / itemsPerRow > rowsToBottom + bufferRowsBelow}
-      {#if index % 4 == 3}
+      {#if index % itemsPerRow == itemsPerRow - 1}
         <div
           style={`min-height: ${dimensions}px; min-width: ${dimensions}px;`} />
       {/if}
     {:else}
-      {#if index % 4 == 0 && index > 0}
+      {#if index % itemsPerRow == 0 && index > 0}
         <br />
       {/if}
       <img
