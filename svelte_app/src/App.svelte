@@ -37,9 +37,11 @@
   });
 </script>
 
-<div
+<div class="thediv"
   on:scroll={handleScroll}
-  style={`padding-top: ${distanceFromTop - (distanceFromTop % rowHeight) - rowHeight * bufferRowsAbove}px;`}>
+  >
+  
+<div style={`padding-top: ${Math.max(0, distanceFromTop - (distanceFromTop % rowHeight) - rowHeight * bufferRowsAbove)}px;`}></div>
   {#each { length: items } as _, index}
     <Image
       {index}
@@ -50,6 +52,6 @@
   {/each}
   <SpeedOMeter bind:speed {distanceTraveled} {rowHeight} />
   <InfiniteScroll
-    threshold={rowHeight * (bufferRowsBelow + 300)}
+    threshold={rowHeight * (bufferRowsBelow*3)}
     on:loadMore={loadMore} />
 </div>

@@ -1,12 +1,10 @@
-body {
+body, html {
 	margin: 0;
 	padding: 0;
 	text-align: center;
-	overflow: hidden;
-	height: 100vh;
 }
 
-div {
+.thediv {
 	width: 100vw;
 	max-height: 100vh;
 	overflow-x: scroll;
