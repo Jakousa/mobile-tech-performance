@@ -17,7 +17,8 @@ Start: 1575913036
 
 TEST 2: List only
 
-STARTUP DELAY: 180f / 244fps = 0.7377049...s
+STARTUP DELAY FLUTTER: 180f / 240fps = 0.75s
+STARTUP DELAY WEB: 150f / 240fps = 0.625s
 
 Start: 1575913415
 62,357K: com.example.flutter_app (pid 19039 / activities) 62,357K: com.example.flutter_app (pid 19039 / activities)||1575913417

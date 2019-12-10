@@ -9,7 +9,7 @@ var rows = 0;
 void main() {
   const oneSec = const Duration(seconds:1);
   new Timer.periodic(oneSec, (Timer t) {
-    print('hi!' + rows.toString());
+    //print('hi!' + rows.toString());
     rows = 0;
   });
   runApp(MyApp());
@@ -29,9 +29,21 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+}
+
 class RandomWordsState extends State<RandomWords> {
   var maxIndex = 1000;
-  var currIndex = 1;
+  var currIndex = 0;
   // https://picsum.photos/id/1084/160/160
   var url = 'https://picsum.photos/160/160';
   var rng = new Random();
@@ -41,13 +53,14 @@ class RandomWordsState extends State<RandomWords> {
 
   Widget _buildSuggestions() {
     return ListView.builder(
-        padding: const EdgeInsets.all(2),
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(top: 2, bottom: 2, left: 2, right: 2),
         itemBuilder: /*1*/ (context, i) {
-          if (i.isOdd) return Container();
+          if (i.isOdd) return Container(height: 0, width: 0);
           rows++;
           //print(rng.nextInt(1000).toString());
           if (i ~/ 2 >= _ids.length) {
-            for (var i = 0; i < 100; i++) {
+            for (var i = 0; i < 25; i++) {
               var temp2 = List<int>();
               for (var i = 0; i < imagesPerRow; i++) {
                 temp2.add(currIndex);
@@ -69,19 +82,17 @@ class RandomWordsState extends State<RandomWords> {
     // debugPrint(row.toString());
     final mapped = row.map<Widget>((id) => Expanded(
       child: Padding(
-        padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
+        padding: EdgeInsets.only(left: 2, top: 1, right: 2, bottom: 1),
         child: Image.network(
-          "https://mobvita.cs.helsinki.fi/id/" + id.toString() + "/90",
-          height: 90,
+          "https://mobvita.cs.helsinki.fi/1/id/" + id.toString() + "/90",
+          height: 86,
           width: 90,
           loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
             if (loadingProgress == null) return child;
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null ?
-                loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                    : null,
-              ),
+            return Container(
+              decoration: BoxDecoration(border: Border.all(), color: Colors.white70),
+              width: 86,
+              height: 86,
             );
           },
         ),
@@ -168,7 +179,8 @@ class RandomWordsState extends State<RandomWords> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Virtualized listerino'),
+        title: Text('Virtualized listerino', style: TextStyle(color: HexColor('#000000')),),
+        backgroundColor: HexColor('#fafafa')
       ),
       body: _buildSuggestions(),
     );

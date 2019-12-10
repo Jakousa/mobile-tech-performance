@@ -1,0 +1,153 @@
+diff --git a/data.txt b/data.txt
+deleted file mode 100644
+index b66053e..0000000
+--- a/data.txt
++++ /dev/null
+@@ -1,5 +0,0 @@
+-Start: 1575931195
+-85,192K: com.example.flutter_app (pid 12842 / activities) 85,192K: com.example.flutter_app (pid 12842 / activities)||1575931197
+-85,196K: com.example.flutter_app (pid 12842 / activities) 85,196K: com.example.flutter_app (pid 12842 / activities)||1575931201
+-85,196K: com.example.flutter_app (pid 12842 / activities) 85,196K: com.example.flutter_app (pid 12842 / activities)||1575931204
+-85,200K: com.example.flutter_app (pid 12842 / activities) 85,200K: com.example.flutter_app (pid 12842 / activities)||1575931207
+diff --git a/dump-mem-2.sh b/dump-mem-2.sh
+new file mode 100755
+index 0000000..b9f7c6f
+--- /dev/null
++++ b/dump-mem-2.sh
+@@ -0,0 +1,11 @@
++#!/bin/bash
++echo "Press [CTRL+C] to stop.."
++echo "Start:" `date +'%s'` >> data.txt
++i=1
++while :
++  do
++    chrome_mem=`~/Library/Android/sdk/platform-tools/adb shell dumpsys meminfo |grep "chrome:" |sed -e 's/   *//g' | sort | uniq| cut -d ':' -f 1 |cut -d 'K' -f 1 |sed -e 's/,//g' |awk 'BEGIN {sum=0} { sum += $1 } END { print sum }'`
++    echo $chrome_mem '||' $i
++    i=$((i + 1))
++    sleep 1
++  done
+\ No newline at end of file
+diff --git a/dump-mem.sh b/dump-mem.sh
+index e9aec58..0824157 100755
+--- a/dump-mem.sh
++++ b/dump-mem.sh
+@@ -1,9 +1,11 @@
+ #!/bin/bash
+ echo "Press [CTRL+C] to stop.."
+ echo "Start:" `date +'%s'` >> data.txt
++i=1
+ while :
+   do
+-    data=`~/Library/Android/sdk/platform-tools/adb shell dumpsys meminfo |grep "flutter"`
+-    echo $data'||'`date +'%s'` >> data.txt
++    data=`~/Library/Android/sdk/platform-tools/adb shell dumpsys meminfo |grep "flutter" |sed -e 's/   *//g' |sort |uniq |cut -d ':' -f 1  |cut -d 'K' -f 1 |sed -e 's/,//g'`
++    echo $data '||' $i
++     i=$((i + 1))
+     sleep 1
+   done
+\ No newline at end of file
+diff --git a/flutter_app/lib/main.dart b/flutter_app/lib/main.dart
+index f993441..05ff86a 100644
+--- a/flutter_app/lib/main.dart
++++ b/flutter_app/lib/main.dart
+@@ -9,7 +9,7 @@ var rows = 0;
+ void main() {
+   const oneSec = const Duration(seconds:1);
+   new Timer.periodic(oneSec, (Timer t) {
+-    print('hi!' + rows.toString());
++    //print('hi!' + rows.toString());
+     rows = 0;
+   });
+   runApp(MyApp());
+@@ -29,9 +29,21 @@ class MyApp extends StatelessWidget {
+   }
+ }
+ 
++class HexColor extends Color {
++  static int _getColorFromHex(String hexColor) {
++    hexColor = hexColor.toUpperCase().replaceAll("#", "");
++    if (hexColor.length == 6) {
++      hexColor = "FF" + hexColor;
++    }
++    return int.parse(hexColor, radix: 16);
++  }
++
++  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
++}
++
+ class RandomWordsState extends State<RandomWords> {
+   var maxIndex = 1000;
+-  var currIndex = 1;
++  var currIndex = 0;
+   // https://picsum.photos/id/1084/160/160
+   var url = 'https://picsum.photos/160/160';
+   var rng = new Random();
+@@ -41,13 +53,14 @@ class RandomWordsState extends State<RandomWords> {
+ 
+   Widget _buildSuggestions() {
+     return ListView.builder(
+-        padding: const EdgeInsets.all(2),
++        physics: const AlwaysScrollableScrollPhysics(),
++        padding: const EdgeInsets.only(top: 2, bottom: 2, left: 2, right: 2),
+         itemBuilder: /*1*/ (context, i) {
+-          if (i.isOdd) return Container();
++          if (i.isOdd) return Container(height: 0, width: 0);
+           rows++;
+           //print(rng.nextInt(1000).toString());
+           if (i ~/ 2 >= _ids.length) {
+-            for (var i = 0; i < 100; i++) {
++            for (var i = 0; i < 25; i++) {
+               var temp2 = List<int>();
+               for (var i = 0; i < imagesPerRow; i++) {
+                 temp2.add(currIndex);
+@@ -69,19 +82,17 @@ class RandomWordsState extends State<RandomWords> {
+     // debugPrint(row.toString());
+     final mapped = row.map<Widget>((id) => Expanded(
+       child: Padding(
+-        padding: EdgeInsets.only(left: 2, top: 0, right: 2, bottom: 0),
++        padding: EdgeInsets.only(left: 2, top: 1, right: 2, bottom: 1),
+         child: Image.network(
+-          "https://mobvita.cs.helsinki.fi/id/" + id.toString() + "/90",
+-          height: 90,
++          "https://mobvita.cs.helsinki.fi/1/id/" + id.toString() + "/90",
++          height: 86,
+           width: 90,
+           loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+             if (loadingProgress == null) return child;
+-            return Center(
+-              child: CircularProgressIndicator(
+-                value: loadingProgress.expectedTotalBytes != null ?
+-                loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+-                    : null,
+-              ),
++            return Container(
++              decoration: BoxDecoration(border: Border.all(), color: Colors.white70),
++              width: 86,
++              height: 86,
+             );
+           },
+         ),
+@@ -168,7 +179,8 @@ class RandomWordsState extends State<RandomWords> {
+   Widget build(BuildContext context) {
+     return Scaffold(
+       appBar: AppBar(
+-        title: Text('Virtualized listerino'),
++        title: Text('Virtualized listerino', style: TextStyle(color: HexColor('#000000')),),
++        backgroundColor: HexColor('#fafafa')
+       ),
+       body: _buildSuggestions(),
+     );
+diff --git a/measurements.txt b/measurements.txt
+index eb6bab9..34867db 100644
+--- a/measurements.txt
++++ b/measurements.txt
+@@ -17,7 +17,8 @@ Start: 1575913036
+ 
+ TEST 2: List only
+ 
+-STARTUP DELAY: 180f / 244fps = 0.7377049...s
++STARTUP DELAY FLUTTER: 180f / 240fps = 0.75s
++STARTUP DELAY WEB: 150f / 240fps = 0.625s
+ 
+ Start: 1575913415
+ 62,357K: com.example.flutter_app (pid 19039 / activities) 62,357K: com.example.flutter_app (pid 19039 / activities)||1575913417
