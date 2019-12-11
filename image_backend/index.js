@@ -2,6 +2,7 @@ const express = require('express')
 const axios = require('axios')
 const app = express()
 const port = 3000
+const KILL_CACHE = false
 
 /**
  * This application is to be friendly to other apis
@@ -34,9 +35,10 @@ app.get('/id/:id/:size', async (req, res) => {
 
   const image = await getImage(size, position)
   res.contentType('image/jpeg')
-  res.setHeader('Content-Disposition', `filename="file${Math.floor(Math.random() * 100000)}.jpg"`)
-  res.setHeader('Etag', `${Math.random()}${Math.random()}`)
-
+  if (KILL_CACHE) {
+    res.setHeader('Content-Disposition', `filename="file${Math.floor(Math.random() * 100000)}.jpg"`)
+    res.setHeader('Etag', `${Math.random()}${Math.random()}`)
+  }
   res.send(new Buffer(image, 'base64'))
 })
 
