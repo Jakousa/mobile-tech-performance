@@ -12,4 +12,4 @@ To build it install flutter from https://flutter.dev/docs/get-started/install an
 
 You can find the Svelte application source code in svelte_app folder.
 
-To build it read the instructions in the readme in the README.md inside the svelte_app folder.
+To build it read the instructions in the readme in the `README.md` inside the svelte_app folder.
