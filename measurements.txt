@@ -236,6 +236,9 @@ FPS:
 
 
   --------
+Svelte startup with empty cache (first row render func called): 122f / 240fps = 0.508333...s
+Svelte startup with empty cache (first image rendered): 158f / 240fps = 0.65833333....s
+
 Svelte, speed 10 rows/s (2 min take):
 
 fps:
